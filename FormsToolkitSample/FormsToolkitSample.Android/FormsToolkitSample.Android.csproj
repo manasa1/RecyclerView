@@ -37,6 +37,11 @@
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+    <AndroidTlsProvider>btls</AndroidTlsProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -173,6 +178,14 @@
     <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FormsToolkit.Droid\FormsToolkit.Droid.csproj">
+      <Project>{f30603ae-7669-4e0a-85ed-c3a83a7d3038}</Project>
+      <Name>FormsToolkit.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FormsToolkit\FormsToolkit.csproj">
+      <Project>{d247ae04-8c42-433d-93fc-2f3c9abbf137}</Project>
+      <Name>FormsToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FormsToolkitSample\FormsToolkitSample.csproj">
       <Project>{db6c02c7-0542-438e-9972-2cfb98df17a1}</Project>
       <Name>FormsToolkitSample</Name>

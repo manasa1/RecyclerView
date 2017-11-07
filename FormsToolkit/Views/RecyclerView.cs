@@ -1,7 +1,11 @@
 ﻿using FormsToolkit.Builders;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
+[assembly: InternalsVisibleTo("FormsToolkit.Droid")]
+[assembly: InternalsVisibleTo("FormsToolkit.iOS")]
+[assembly: InternalsVisibleTo("FormsToolkit.UWP")]
 namespace FormsToolkit.Views
 {
     public class RecyclerView : View
@@ -11,7 +15,10 @@ namespace FormsToolkit.Views
             nameof(ItemsSource),
             typeof(IEnumerable),
             typeof(RecyclerView),
-            null);
+            null,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnItemsSourceChanged?.Invoke((RecyclerView) bindable, new PropertyChangingEventArgs(nameof(ItemsSource))));
+
+        public event PropertyChangingEventHandler OnItemsSourceChanged; 
 
         public DataTemplate ItemTemplate;
 
@@ -25,6 +32,16 @@ namespace FormsToolkit.Views
         {
             ItemTemplate = TemplateBuilder.GenerateDefaultTemplate();
             HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
+        }
+
+        internal View GenerateView(object obj)
+        {
+            DataTemplate template = ItemTemplate;
+
+            if (template is DataTemplateSelector)
+                template = ((DataTemplateSelector)template).SelectTemplate(obj, this);
+
+            return template.CreateContent() as View;
         }
 
     }

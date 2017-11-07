@@ -16,5 +16,24 @@ namespace FormsToolkit.Extensions
             return index;
         }
 
+        public static T ElementAt<T>(this IEnumerable enumerable, int index)
+        {
+            if (enumerable is IList)
+                return (T) ((IList)enumerable)[index];
+
+            var enumerator = enumerable.GetEnumerator();
+
+            var i = 0;
+            while (enumerator.MoveNext())
+            {
+                if (i == index)
+                    return (T) enumerator.Current;
+
+                i++;
+            }
+
+            return default(T);
+        }
+
     }
 }

@@ -9,10 +9,11 @@ namespace FormsToolkit.Builders
         {
             return new DataTemplate(() =>
             {
-                return new Grid
+                return new Label
                 {
-                    BackgroundColor = Color.Pink,
-                    HeightRequest = 100
+                    Text = "No Data Template Selected",
+                    BackgroundColor = Color.BlueViolet,
+                    WidthRequest = 200
                 };
             });
         }

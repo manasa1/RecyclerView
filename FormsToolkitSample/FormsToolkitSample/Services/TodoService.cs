@@ -15,7 +15,10 @@ namespace FormsToolkitSample.Services
 
         public TodoService()
         {
-            TodoRestService = RestService.For<ITodoRest>("https://jsonplaceholder.typicode.com"); 
+            TodoRestService = RestService.For<ITodoRest>(new System.Net.Http.HttpClient()
+            {
+                BaseAddress = new System.Uri("https://jsonplaceholder.typicode.com")
+            }); 
         }
 
         public async Task<IList<Todo>> ListAllAsync()
