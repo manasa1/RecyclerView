@@ -1,8 +1,5 @@
 ﻿using FormsToolkit.Builders;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace FormsToolkit.Views
@@ -10,13 +7,24 @@ namespace FormsToolkit.Views
     public class RecyclerView : View
     {
 
+        public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
+            nameof(ItemsSource),
+            typeof(IEnumerable),
+            typeof(RecyclerView),
+            null);
+
         public DataTemplate ItemTemplate;
 
-        public IEnumerable ItemSource;
+        public IEnumerable ItemsSource
+        {
+            get => (IEnumerable) GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
+        }
         
         public RecyclerView()
         {
             ItemTemplate = TemplateBuilder.GenerateDefaultTemplate();
+            HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
         }
 
     }

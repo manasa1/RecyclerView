@@ -21,11 +21,7 @@
             <Button Text="Completed" Grid.Row="0" Grid.Column="1" />
             <Button Text="All" Grid.Row="0" Grid.Column="2" />
 
-            <!--
-            <v:RecyclerView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" />
-            -->
-
-            <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Todos}" />
+            <v:RecyclerView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Todos}" />
 
         </Grid>    
     </ContentPage.Content>
