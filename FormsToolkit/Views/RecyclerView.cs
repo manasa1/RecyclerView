@@ -18,6 +18,26 @@ namespace FormsToolkit.Views
             null,
             propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnItemsSourceChanged?.Invoke((RecyclerView) bindable, new PropertyChangingEventArgs(nameof(ItemsSource))));
 
+        public static readonly BindableProperty RowHeightProperty = BindableProperty.Create(
+            nameof(RowHeight),
+            typeof(double),
+            typeof(RecyclerView),
+            -1d,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnRowHeightChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(RowHeight))));
+
+        public static readonly BindableProperty RowWidthProperty = BindableProperty.Create(
+            nameof(RowHeight),
+            typeof(double),
+            typeof(RecyclerView),
+            -1d,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnRowWidthChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(RowWidth))));
+
+        public event PropertyChangingEventHandler OnRowHeightChanged;
+
+        public event PropertyChangingEventHandler OnRowWidthChanged;
+
+        public event PropertyChangingEventHandler OnHasUnevenRowsChanged;
+
         public event PropertyChangingEventHandler OnItemsSourceChanged; 
 
         public DataTemplate ItemTemplate;
@@ -27,7 +47,13 @@ namespace FormsToolkit.Views
             get => (IEnumerable) GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
+
+        public double RowHeight { get; set; }
         
+        public double RowWidth { get; set; }
+
+        public bool HasUnevenRows { get; set; }
+
         public RecyclerView()
         {
             ItemTemplate = TemplateBuilder.GenerateDefaultTemplate();

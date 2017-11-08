@@ -10,7 +10,7 @@ using Android.Support.V7.Widget;
 [assembly:ExportRenderer(typeof(FormsToolkit.Views.RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.Droid.Renderers
 {
-    public class RecyclerViewRenderer : ViewRenderer<Views.RecyclerView, Android.Support.V7.Widget.RecyclerView>
+    public class RecyclerViewRenderer : ViewRenderer<FormsToolkit.Views.RecyclerView, Android.Support.V7.Widget.RecyclerView>
     {
 
         RecyclerAdapter Adapter;
@@ -21,7 +21,7 @@ namespace FormsToolkit.Droid.Renderers
             var dt = DateTime.Now;
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Views.RecyclerView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<FormsToolkit.Views.RecyclerView> e)
         {
             base.OnElementChanged(e);
 
@@ -37,12 +37,12 @@ namespace FormsToolkit.Droid.Renderers
                 DestroyElement(e.OldElement);
         }
 
-        void SetupElement(Views.RecyclerView newElement)
+        void SetupElement(FormsToolkit.Views.RecyclerView newElement)
         {
             newElement.OnItemsSourceChanged += HandleItemSourceChanged;
         }
 
-        void DestroyElement(Views.RecyclerView oldElement)
+        void DestroyElement(FormsToolkit.Views.RecyclerView oldElement)
         {
             oldElement.OnItemsSourceChanged -= HandleItemSourceChanged;
         }
@@ -61,8 +61,11 @@ namespace FormsToolkit.Droid.Renderers
             Manager = new LinearLayoutManager(Forms.Context);
 
             // Configure
+            Manager.AutoMeasureEnabled = true;
+
             recycler.SetLayoutManager(Manager);
             recycler.SetAdapter(Adapter);
+            recycler.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
 
             // Set
             SetNativeControl(recycler);

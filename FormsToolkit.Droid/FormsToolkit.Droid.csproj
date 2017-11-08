@@ -90,6 +90,7 @@
     <Compile Include="Holders\RecyclerViewHolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\RecyclerViewRenderer.cs" />
+    <Compile Include="Views\ContainerViewGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FormsToolkit\FormsToolkit.csproj">
