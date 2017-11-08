@@ -3,11 +3,13 @@
 using FormsToolkit.Views;
 using FormsToolkit.UWP.Views;
 using FormsToolkit.UWP.Renderers;
+using System;
+using Windows.UI.Xaml;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.UWP.Renderers
 {
-    public class RecyclerViewRenderer : ViewRenderer<RecyclerView, Windows.UI.Xaml.Controls.ListView>
+    public class RecyclerViewRenderer : ViewRenderer<RecyclerView, FrameworkElement>
     {
 
         protected override void OnElementChanged(ElementChangedEventArgs<RecyclerView> e)
@@ -28,7 +30,7 @@ namespace FormsToolkit.UWP.Renderers
 
         void SetupControl()
         {
-            SetNativeControl(new NativeRecyclerListView());
+            SetNativeControl(new NativeRecyclerListView(this));
         }
 
         void SetupElement(RecyclerView element)
@@ -44,13 +46,14 @@ namespace FormsToolkit.UWP.Renderers
             element.OnItemsSourceChanged -= HandleOnItemsSourceChanged;
         }
 
-        void HandleOnItemsSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
-        {
-            Control.ItemsSource = Element.ItemsSource;
-        }
-
         void HandleOnItemTemplateChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
         {
+            // TODO - Reload Content
+        }
+
+        void HandleOnItemsSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        {
+            ((NativeRecyclerListView)Control).EmbeddedList.ItemsSource = Element.ItemsSource;
         }
 
     }
