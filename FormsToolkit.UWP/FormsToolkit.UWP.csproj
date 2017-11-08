@@ -108,6 +108,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\RecyclerViewRenderer.cs" />
+    <Compile Include="Views\FormsBoundTemplate.cs" />
+    <Compile Include="Views\NativeRecyclerListView.cs" />
     <EmbeddedResource Include="Properties\FormsToolkit.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>

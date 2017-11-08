@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FormsToolkit.Views;
-using Xamarin.Forms.Platform.UWP;
+﻿using Xamarin.Forms.Platform.UWP;
 
+using FormsToolkit.Views;
+using FormsToolkit.UWP.Views;
+using FormsToolkit.UWP.Renderers;
+
+[assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.UWP.Renderers
 {
     public class RecyclerViewRenderer : ViewRenderer<RecyclerView, Windows.UI.Xaml.Controls.ListView>
@@ -14,12 +12,45 @@ namespace FormsToolkit.UWP.Renderers
 
         protected override void OnElementChanged(ElementChangedEventArgs<RecyclerView> e)
         {
+            if (e.NewElement != null)
+            {
+                if (Control == null)
+                    SetupControl();
+
+                SetupElement(e.NewElement);
+            }
+
+            if (e.OldElement != null)
+                DestroyElement(e.OldElement);
+
             base.OnElementChanged(e);
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        void SetupControl()
         {
-            base.OnElementPropertyChanged(sender, e);
+            SetNativeControl(new NativeRecyclerListView());
+        }
+
+        void SetupElement(RecyclerView element)
+        {
+            element.OnItemsSourceChanged += HandleOnItemsSourceChanged;
+
+            HandleOnItemsSourceChanged(element, null);
+            HandleOnItemTemplateChanged(element, null);
+        }
+
+        void DestroyElement(RecyclerView element)
+        {
+            element.OnItemsSourceChanged -= HandleOnItemsSourceChanged;
+        }
+
+        void HandleOnItemsSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        {
+            Control.ItemsSource = Element.ItemsSource;
+        }
+
+        void HandleOnItemTemplateChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        {
         }
 
     }

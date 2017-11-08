@@ -152,6 +152,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FormsToolkit.UWP\FormsToolkit.UWP.csproj">
+      <Project>{5404d7a0-76b1-4833-a2e3-455489cdcccf}</Project>
+      <Name>FormsToolkit.UWP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FormsToolkit\FormsToolkit.csproj">
+      <Project>{d247ae04-8c42-433d-93fc-2f3c9abbf137}</Project>
+      <Name>FormsToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FormsToolkitSample\FormsToolkitSample.csproj">
       <Project>{db6c02c7-0542-438e-9972-2cfb98df17a1}</Project>
       <Name>FormsToolkitSample</Name>
