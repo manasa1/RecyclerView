@@ -1,4 +1,5 @@
 ﻿using FormsToolkit.Builders;
+using FormsToolkit.Enumerations;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
@@ -11,6 +12,7 @@ namespace FormsToolkit.Views
     public class RecyclerView : View
     {
 
+#region Bindable Properties
         public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
             nameof(ItemsSource),
             typeof(IEnumerable),
@@ -22,23 +24,42 @@ namespace FormsToolkit.Views
             nameof(RowHeight),
             typeof(double),
             typeof(RecyclerView),
-            -1d,
+            44d,
             propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnRowHeightChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(RowHeight))));
 
         public static readonly BindableProperty RowWidthProperty = BindableProperty.Create(
             nameof(RowHeight),
             typeof(double),
             typeof(RecyclerView),
-            -1d,
+            44d,
             propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnRowWidthChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(RowWidth))));
 
+        public static readonly BindableProperty HasUnevenRowsProperty = BindableProperty.Create(
+            nameof(HasUnevenRows),
+            typeof(bool),
+            typeof(RecyclerView),
+            true,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnHasUnevenRowsChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(HasUnevenRows))));
+
+        public static readonly BindableProperty OrientationProperty = BindableProperty.Create(
+            nameof(Orientation),
+            typeof(ListOrientation),
+            typeof(RecyclerView),
+            ListOrientation.Vertical,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnOrientationChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(Orientation))));
+#endregion
+
+#region Events
         public event PropertyChangingEventHandler OnRowHeightChanged;
 
         public event PropertyChangingEventHandler OnRowWidthChanged;
 
         public event PropertyChangingEventHandler OnHasUnevenRowsChanged;
 
-        public event PropertyChangingEventHandler OnItemsSourceChanged; 
+        public event PropertyChangingEventHandler OnItemsSourceChanged;
+
+        public event PropertyChangingEventHandler OnOrientationChanged;
+#endregion
 
         public DataTemplate ItemTemplate;
 
@@ -48,26 +69,33 @@ namespace FormsToolkit.Views
             set => SetValue(ItemsSourceProperty, value);
         }
 
-        public double RowHeight { get; set; }
+        public double RowHeight
+        {
+            get => (double) GetValue(RowHeightProperty);
+            set => SetValue(RowHeightProperty, value);
+        }
         
-        public double RowWidth { get; set; }
+        public double RowWidth
+        {
+            get => (double)GetValue(RowWidthProperty);
+            set => SetValue(RowWidthProperty, value);
+        }
 
-        public bool HasUnevenRows { get; set; }
+        public bool HasUnevenRows
+        {
+            get => (bool) GetValue(HasUnevenRowsProperty);
+            set => SetValue(HasUnevenRowsProperty, value);
+        }
+
+        public ListOrientation Orientation
+        {
+            get => (ListOrientation) GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
+        }
 
         public RecyclerView()
         {
             ItemTemplate = TemplateBuilder.GenerateDefaultTemplate();
-            HorizontalOptions = VerticalOptions = LayoutOptions.FillAndExpand;
-        }
-
-        internal View GenerateView(object obj)
-        {
-            DataTemplate template = ItemTemplate;
-
-            if (template is DataTemplateSelector)
-                template = ((DataTemplateSelector)template).SelectTemplate(obj, this);
-
-            return template.CreateContent() as View;
         }
 
     }

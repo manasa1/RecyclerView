@@ -18,10 +18,6 @@ namespace FormsToolkit.Droid.Holders
     public class RecyclerViewHolder : RecyclerView.ViewHolder
     {
 
-        Android.Views.View _itemView;
-
-        Xamarin.Forms.View _abstractView;
-
         public RecyclerViewHolder(Android.Views.View itemView) : base (itemView)
         {
         }

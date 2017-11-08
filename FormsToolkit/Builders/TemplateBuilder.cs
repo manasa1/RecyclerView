@@ -9,12 +9,16 @@ namespace FormsToolkit.Builders
         {
             return new DataTemplate(() =>
             {
-                StackLayout layout = new StackLayout();
+                StackLayout layout = new StackLayout()
+                {
+                    BackgroundColor = Color.BlueViolet
+                };
+
                 layout.Children.Add(new Button()
                 {
                     Text = "No Data Template Selected",
                     BackgroundColor = Color.BlueViolet,
-                    WidthRequest = 200
+                    HeightRequest = 200
                 });
 
                 return layout;
