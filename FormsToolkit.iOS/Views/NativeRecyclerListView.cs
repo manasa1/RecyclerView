@@ -6,6 +6,7 @@ using System.Text;
 using Foundation;
 using UIKit;
 using CoreGraphics;
+using FormsToolkit.iOS.Cells;
 
 namespace FormsToolkit.iOS.Views
 {
@@ -19,7 +20,7 @@ namespace FormsToolkit.iOS.Views
         {
             AutoresizingMask = UIViewAutoresizing.All;
             ContentMode = UIViewContentMode.ScaleToFill;
-            // RegisterClassForCell(typeof(GridViewCell), new NSString(GridViewCell.Key));
+            RegisterClassForCell(typeof(RecycleCell), new NSString(RecycleCell.Key));
         }
     }
 }

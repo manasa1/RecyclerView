@@ -58,6 +58,7 @@
     <Compile Include="Cells\RecycleCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderers\RecyclerViewRenderer.cs" />
+    <Compile Include="Sources\RecyclerDataSource.cs" />
     <Compile Include="Views\NativeRecyclerListView.cs" />
   </ItemGroup>
   <ItemGroup>
