@@ -8,7 +8,7 @@
     <ListView x:Name="EmbeddedList" x:FieldModifier="public" Margin="-12, 0, -12, 0" Background="BlueViolet">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <views:FormsBoundTemplate NativeRecyclerListView="{Binding ElementName=NativeListView}" BindingContext="{Binding }" />
+                <views:FormsBoundTemplate BindingContext="{Binding }" />
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

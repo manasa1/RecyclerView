@@ -1,9 +1,14 @@
 ﻿using Xamarin.Forms.Platform.UWP;
 
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
 using FormsToolkit.Views;
 using FormsToolkit.UWP.Views;
 using FormsToolkit.UWP.Renderers;
-using System;
+using FormsToolkit.UWP.Models;
+
 using Windows.UI.Xaml;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
@@ -53,7 +58,21 @@ namespace FormsToolkit.UWP.Renderers
 
         void HandleOnItemsSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
         {
-            ((NativeRecyclerListView)Control).EmbeddedList.ItemsSource = Element.ItemsSource;
+            if (Element?.ItemsSource == null)
+                return;
+
+            List<ContextRendererContainer<RecyclerViewRenderer>> newSource = new List<ContextRendererContainer<RecyclerViewRenderer>>();
+
+            foreach (var item in Element.ItemsSource)
+            {
+                newSource.Add(new ContextRendererContainer<RecyclerViewRenderer>()
+                {
+                    Context = item,
+                    Renderer = this
+                });
+            }
+
+            ((NativeRecyclerListView)Control).EmbeddedList.ItemsSource = newSource;
         }
 
     }
