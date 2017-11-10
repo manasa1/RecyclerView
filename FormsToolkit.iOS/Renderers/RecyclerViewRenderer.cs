@@ -11,6 +11,7 @@ using FormsToolkit.Views;
 using FormsToolkit.iOS.Renderers;
 using CoreGraphics;
 using FormsToolkit.iOS.Source;
+using FormsToolkit.iOS.Cells;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.iOS.Renderers
@@ -53,9 +54,11 @@ namespace FormsToolkit.iOS.Renderers
 
         void SetupControl()
         {
-            var control = new UICollectionView(new CGRect(0, 0, 300, 256), new UICollectionViewFlowLayout());
-            control.RegisterClassForCell(typeof(UICollectionViewCell), "MyCell");
+            var control = new UICollectionView(new CGRect(Element.X, Element.Y, Element.Width, Element.Height), new UICollectionViewFlowLayout());
+
+            control.RegisterClassForCell(typeof(RecycleCell), RecycleCell.Key);
             control.DataSource = new RecyclerViewSource(this);
+            control.AlwaysBounceHorizontal = true;
 
             SetNativeControl(control);
         }

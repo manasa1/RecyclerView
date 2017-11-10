@@ -9,6 +9,7 @@ using UIKit;
 using FormsToolkit.Extensions;
 using FormsToolkit.iOS.Renderers;
 using CoreGraphics;
+using FormsToolkit.iOS.Cells;
 
 namespace FormsToolkit.iOS.Source
 {
@@ -24,8 +25,13 @@ namespace FormsToolkit.iOS.Source
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            UICollectionViewCell cell = (UICollectionViewCell) collectionView.DequeueReusableCell("MyCell", indexPath);
+            UICollectionViewCell cell = (UICollectionViewCell) collectionView.DequeueReusableCell(RecycleCell.Key, indexPath);
 
+            _rendererReference.TryGetTarget(out RecyclerViewRenderer renderer);
+            var w = renderer.Element.Width;
+            var h = renderer.Element.Height;
+
+            cell.Frame = new CGRect(cell.Frame.X, cell.Frame.Y, w, cell.Frame.Height);
             cell.BackgroundColor = UIColor.Red;
 
             UILabel li = new UILabel(new CGRect(0, 0, 10, 20))
