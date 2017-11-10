@@ -163,6 +163,16 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FormsToolkit.iOS\FormsToolkit.iOS.csproj">
+      <Project>{b2092f4d-c340-468c-aaa2-950ca10014af}</Project>
+      <Name>FormsToolkit.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FormsToolkit\FormsToolkit.csproj">
+      <Project>{d247ae04-8c42-433d-93fc-2f3c9abbf137}</Project>
+      <Name>FormsToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FormsToolkitSample\FormsToolkitSample.csproj">
       <Project>{db6c02c7-0542-438e-9972-2cfb98df17a1}</Project>
       <Name>FormsToolkitSample</Name>

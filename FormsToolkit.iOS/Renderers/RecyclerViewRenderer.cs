@@ -9,17 +9,22 @@ using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms;
 using FormsToolkit.Views;
 using FormsToolkit.iOS.Renderers;
-using FormsToolkit.iOS.Views;
+using CoreGraphics;
+using FormsToolkit.iOS.Source;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.iOS.Renderers
 {
     public class RecyclerViewRenderer : ViewRenderer<RecyclerView, UICollectionView>
     {
+        
+        public static void Init()
+        {
+            var dt = DateTime.Now;
+        }
 
         protected override void OnElementChanged(ElementChangedEventArgs<RecyclerView> e)
         {
-
             if (e.NewElement != null)
             {
                 if (Control == null)
@@ -48,7 +53,11 @@ namespace FormsToolkit.iOS.Renderers
 
         void SetupControl()
         {
-            SetNativeControl(new NativeRecyclerListView());
+            var control = new UICollectionView(new CGRect(0, 0, 300, 256), new UICollectionViewFlowLayout());
+            control.RegisterClassForCell(typeof(UICollectionViewCell), "MyCell");
+            control.DataSource = new RecyclerViewSource(this);
+
+            SetNativeControl(control);
         }
 
         void HandleOnItemsSourceChanged(object sender, PropertyChangingEventArgs e)

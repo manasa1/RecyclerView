@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Foundation;
+using UIKit;
+
+using FormsToolkit.Extensions;
+using FormsToolkit.iOS.Renderers;
+using CoreGraphics;
+
+namespace FormsToolkit.iOS.Source
+{
+    public class RecyclerViewSource : UICollectionViewSource
+    {
+
+        WeakReference<RecyclerViewRenderer> _rendererReference;
+
+        public RecyclerViewSource(RecyclerViewRenderer renderer)
+        {
+            _rendererReference = new WeakReference<RecyclerViewRenderer>(renderer);
+        }
+
+        public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            UICollectionViewCell cell = (UICollectionViewCell) collectionView.DequeueReusableCell("MyCell", indexPath);
+
+            cell.BackgroundColor = UIColor.Red;
+
+            UILabel li = new UILabel(new CGRect(0, 0, 10, 20))
+            {
+                Text = "xyz"
+            };
+
+            cell.AddSubview(li);
+            return cell;
+        }
+
+        public override nint NumberOfSections(UICollectionView collectionView)
+        {
+            return 1;
+        }
+
+        public override nint GetItemsCount(UICollectionView collectionView, nint section)
+        {
+            if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
+                return 0;
+
+            return renderer.Element.ItemsSource?.Count() ?? 0;
+        }
+
+    }
+}

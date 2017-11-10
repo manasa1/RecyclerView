@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using FormsToolkit.iOS.Renderers;
 
 namespace FormsToolkitSample.iOS
 {
@@ -24,6 +25,8 @@ namespace FormsToolkitSample.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+
+            RecyclerViewRenderer.Init();
 
             return base.FinishedLaunching(app, options);
         }
