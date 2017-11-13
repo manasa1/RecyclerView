@@ -9,24 +9,30 @@ namespace FormsToolkit.Builders
         {
             return new DataTemplate(() =>
             {
-                StackLayout layout = new StackLayout()
+                Grid grid = new Grid
                 {
                     BackgroundColor = Color.Blue,
-                    WidthRequest = 200,
                     HeightRequest = 200,
+                    RowDefinitions =
+                    {
+                        new RowDefinition() { Height = GridLength.Star },
+                        new RowDefinition() { Height = 50 },
+                        new RowDefinition() { Height = GridLength.Star }
+                    }
                 };
 
-                layout.Children.Add(new Button()
+                Button button = new Button()
                 {
                     Text = "No Data Template Selected",
                     TextColor = Color.Blue,
-                    BackgroundColor = Color.WhiteSmoke,
-                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.Center,
-                    HeightRequest = 50
-                });
+                    BackgroundColor = Color.WhiteSmoke
+                };
 
-                return layout;
+                Grid.SetRow(button, 1);
+                Grid.SetColumn(button, 0);
+                grid.Children.Add(button);
+
+                return grid;
             });
         }
 
