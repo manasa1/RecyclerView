@@ -58,7 +58,9 @@ namespace FormsToolkit.iOS.Renderers
 
             control.RegisterClassForCell(typeof(RecycleCell), RecycleCell.Key);
             control.DataSource = new RecyclerViewSource(this);
-            control.AlwaysBounceHorizontal = true;
+
+            control.AlwaysBounceHorizontal = false;
+            control.AlwaysBounceVertical = true;
 
             SetNativeControl(control);
         }

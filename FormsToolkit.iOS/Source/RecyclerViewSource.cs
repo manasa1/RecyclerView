@@ -28,6 +28,9 @@ namespace FormsToolkit.iOS.Source
             UICollectionViewCell cell = (UICollectionViewCell) collectionView.DequeueReusableCell(RecycleCell.Key, indexPath);
 
             _rendererReference.TryGetTarget(out RecyclerViewRenderer renderer);
+
+            System.Diagnostics.Debug.WriteLine($"Got {indexPath.Length} at section {indexPath.Section}");
+
             var w = renderer.Element.Width;
             var h = renderer.Element.Height;
 
@@ -45,11 +48,16 @@ namespace FormsToolkit.iOS.Source
 
         public override nint NumberOfSections(UICollectionView collectionView)
         {
-            return 1;
+            if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
+                return 1;
+
+            return renderer.Element.ItemsSource?.Count() ?? 1;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
+            return 1;
+
             if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
                 return 0;
 
