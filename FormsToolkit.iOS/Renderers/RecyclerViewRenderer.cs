@@ -7,11 +7,14 @@ using Foundation;
 using UIKit;
 using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms;
+using CoreGraphics;
+
+using FormsToolkit.Extensions;
 using FormsToolkit.Views;
 using FormsToolkit.iOS.Renderers;
-using CoreGraphics;
 using FormsToolkit.iOS.Source;
 using FormsToolkit.iOS.Cells;
+using FormsToolkit.iOS.Delegates;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.iOS.Renderers
@@ -59,6 +62,9 @@ namespace FormsToolkit.iOS.Renderers
             control.RegisterClassForCell(typeof(RecycleCell), RecycleCell.Key);
             control.DataSource = new RecyclerViewSource(this);
 
+            control.Delegate = new RecyclerViewDelegateFlowLayout(this);
+
+            control.TranslatesAutoresizingMaskIntoConstraints = false;
             control.AlwaysBounceHorizontal = false;
             control.AlwaysBounceVertical = true;
 
@@ -68,6 +74,42 @@ namespace FormsToolkit.iOS.Renderers
         void HandleOnItemsSourceChanged(object sender, PropertyChangingEventArgs e)
         {
             Control.ReloadData();
+        }
+
+        internal CGRect GenerateFrameForCell(UIView nativeView, NSIndexPath indexPath)
+        {
+            var x = nativeView.Frame.Width * indexPath.Row;
+            var y = nativeView.Frame.Height * indexPath.Section;
+
+            if (Element.Orientation == Enumerations.ListOrientation.Horizontal)
+                return new CGRect(x, 0, nativeView.Frame.Width, Element.Height);
+            return new CGRect(0, y, Element.Width, nativeView.Frame.Height);
+        }
+
+        internal UIView GetNativeViewForItem(UICollectionView collectionView, object item)
+        {
+            // Generate from DT
+            var view = Element.ItemTemplate.GenerateView(Element, item);
+
+            // Convert
+            Platform.SetRenderer(view, Platform.CreateRenderer(view));
+            var viewRenderer = Platform.GetRenderer(view);
+            var eView = viewRenderer.Element;
+            var iView = viewRenderer.NativeView;
+
+            var measure = viewRenderer.Element.Measure(Element.Width, double.PositiveInfinity, MeasureFlags.IncludeMargins);
+
+            eView.Layout(new Rectangle(0, 0, Element.Width, measure.Request.Height));
+            iView.Frame = new CGRect(0, 0, Element.Width, measure.Request.Height);
+
+            return iView;
+        }
+
+        internal object GetItemFromNSIndex(NSIndexPath indexPath)
+        {
+            if (Element.Orientation == Enumerations.ListOrientation.Horizontal)
+                return Element.ItemsSource.ElementAt<object>(indexPath.Row);
+            return Element.ItemsSource.ElementAt<object>(indexPath.Section);
         }
     }
 }

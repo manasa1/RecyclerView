@@ -18,6 +18,9 @@ namespace FormsToolkit.Extensions
 
         public static T ElementAt<T>(this IEnumerable enumerable, int index)
         {
+            if (enumerable == null)
+                return default(T);
+
             if (enumerable is IList)
                 return (T) ((IList)enumerable)[index];
 

@@ -6,10 +6,13 @@ using System.Text;
 using Foundation;
 using UIKit;
 
+using Xamarin.Forms.Platform.iOS;
+
 using FormsToolkit.Extensions;
 using FormsToolkit.iOS.Renderers;
-using CoreGraphics;
 using FormsToolkit.iOS.Cells;
+using CoreGraphics;
+using Xamarin.Forms;
 
 namespace FormsToolkit.iOS.Source
 {
@@ -25,43 +28,42 @@ namespace FormsToolkit.iOS.Source
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            UICollectionViewCell cell = (UICollectionViewCell) collectionView.DequeueReusableCell(RecycleCell.Key, indexPath);
+            // Prepare
+            var cell = (UICollectionViewCell) collectionView.DequeueReusableCell(RecycleCell.Key, indexPath);
+            if (cell == null || !_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
+                return new UICollectionViewCell(new CGRect(0, 0, 0, 0));
 
-            _rendererReference.TryGetTarget(out RecyclerViewRenderer renderer);
+            // Get
+            var item = renderer.GetItemFromNSIndex(indexPath);
+            var nativeView = renderer.GetNativeViewForItem(collectionView, item);
 
-            System.Diagnostics.Debug.WriteLine($"Got {indexPath.Length} at section {indexPath.Section}");
+            // Merge
+            var frame = renderer.GenerateFrameForCell(nativeView, indexPath);
+            cell.Frame = frame;
+            cell.AddSubview(nativeView);
 
-            var w = renderer.Element.Width;
-            var h = renderer.Element.Height;
-
-            cell.Frame = new CGRect(cell.Frame.X, cell.Frame.Y, w, cell.Frame.Height);
-            cell.BackgroundColor = UIColor.Red;
-
-            UILabel li = new UILabel(new CGRect(0, 0, 10, 20))
-            {
-                Text = "xyz"
-            };
-
-            cell.AddSubview(li);
+            // Return
             return cell;
         }
 
         public override nint NumberOfSections(UICollectionView collectionView)
         {
             if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
-                return 1;
+                return 0;
 
-            return renderer.Element.ItemsSource?.Count() ?? 1;
+            if (renderer.Element.Orientation == Enumerations.ListOrientation.Horizontal)
+                return 1;
+            return renderer.Element.ItemsSource?.Count() ?? 0;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
-            return 1;
-
             if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
                 return 0;
 
-            return renderer.Element.ItemsSource?.Count() ?? 0;
+            if (renderer.Element.Orientation == Enumerations.ListOrientation.Horizontal)
+                return renderer.Element.ItemsSource?.Count() ?? 0;
+            return 1;
         }
 
     }

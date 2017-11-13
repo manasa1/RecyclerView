@@ -17,7 +17,8 @@ namespace FormsToolkit.Builders
                 layout.Children.Add(new Button()
                 {
                     Text = "No Data Template Selected",
-                    BackgroundColor = Color.BlueViolet,
+                    TextColor = Color.Blue,
+                    BackgroundColor = Color.WhiteSmoke,
                     HeightRequest = 200
                 });
 
