@@ -1,8 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="clr-namespace:FormsToolkitSample.Selectors"
              xmlns:v="clr-namespace:FormsToolkit.Views;assembly=FormsToolkit"
              x:Class="FormsToolkitSample.Pages.TodoListSample">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate x:Key="AllTemplate">
+                <Grid HeightRequest="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <BoxView Grid.Column="0" Grid.Row="0" BackgroundColor="Green" />
+                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center"
+                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CompletedTemplate">
+                <Grid></Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="TodoTemplate">
+                <Grid></Grid>
+            </DataTemplate>
+
+            <s:TodoSelector x:Key="TodoSelector"
+                            AllTemplate="{StaticResource Key=AllTemplate}"
+                            CompletedTemplate="{StaticResource Key=CompletedTemplate}" 
+                            TodoTemplate="{StaticResource Key=TodoTemplate}" />
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <ContentPage.Content>
         <Grid>
@@ -15,13 +51,15 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                
             </Grid.ColumnDefinitions>
 
             <Button Text="To Be Completed" Grid.Row="0" Grid.Column="0" />
             <Button Text="Completed" Grid.Row="0" Grid.Column="1" />
             <Button Text="All" Grid.Row="0" Grid.Column="2" />
 
-            <v:RecyclerView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Todos}" />
+            <v:RecyclerView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver"
+                            ItemsSource="{Binding Todos}" ItemTemplate="{StaticResource Key=TodoSelector}" />
 
         </Grid>    
     </ContentPage.Content>

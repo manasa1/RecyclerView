@@ -9,7 +9,11 @@ namespace FormsToolkit.Extensions
         {
             if (template is DataTemplateSelector)
                 template = ((DataTemplateSelector)template).SelectTemplate(context, bindable);
-            return (View) template.CreateContent();
+
+            var view = (View) template.CreateContent();
+            view.BindingContext = context;
+
+            return view;
         }
 
     }

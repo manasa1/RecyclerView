@@ -47,6 +47,13 @@ namespace FormsToolkit.Views
             typeof(RecyclerView),
             ListOrientation.Vertical,
             propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnOrientationChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(Orientation))));
+
+        public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(
+            nameof(ItemTemplate),
+            typeof(DataTemplate),
+            typeof(RecyclerView),
+            null,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnTemplateChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(ItemTemplate))));
 #endregion
 
 #region Events
@@ -59,9 +66,15 @@ namespace FormsToolkit.Views
         public event PropertyChangingEventHandler OnItemsSourceChanged;
 
         public event PropertyChangingEventHandler OnOrientationChanged;
+
+        public event PropertyChangingEventHandler OnTemplateChanged;
 #endregion
 
-        public DataTemplate ItemTemplate;
+        public DataTemplate ItemTemplate
+        {
+            get => (DataTemplate) GetValue(ItemTemplateProperty);
+            set => SetValue(ItemTemplateProperty, value);
+        }
 
         public IEnumerable ItemsSource
         {

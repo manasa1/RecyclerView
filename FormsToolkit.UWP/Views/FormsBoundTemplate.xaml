@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <Grid x:Name="Container" Background="Crimson">
+    <Grid x:Name="Container">
     </Grid>
     
 </UserControl>
