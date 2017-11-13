@@ -39,6 +39,7 @@ namespace FormsToolkit.iOS.Source
 
             // Merge
             var frame = renderer.GenerateFrameForCell(nativeView, indexPath);
+
             cell.Frame = frame;
             cell.AddSubview(nativeView);
 

@@ -21,7 +21,11 @@ namespace FormsToolkit.iOS.Delegates
         [Export("collectionView:layout:sizeForItemAtIndexPath:")]
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            return base.GetSizeForItem(collectionView, layout, indexPath);
+            if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
+                return new CGSize(0, 0);
+
+            // Test hack
+            return new CGSize(renderer.Element.Width, 200);
         }
 
     }

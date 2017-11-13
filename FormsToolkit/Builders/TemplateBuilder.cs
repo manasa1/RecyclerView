@@ -11,7 +11,9 @@ namespace FormsToolkit.Builders
             {
                 StackLayout layout = new StackLayout()
                 {
-                    BackgroundColor = Color.BlueViolet
+                    BackgroundColor = Color.Blue,
+                    WidthRequest = 200,
+                    HeightRequest = 200,
                 };
 
                 layout.Children.Add(new Button()
@@ -19,7 +21,9 @@ namespace FormsToolkit.Builders
                     Text = "No Data Template Selected",
                     TextColor = Color.Blue,
                     BackgroundColor = Color.WhiteSmoke,
-                    HeightRequest = 200
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.Center,
+                    HeightRequest = 50
                 });
 
                 return layout;

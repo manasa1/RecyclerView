@@ -64,7 +64,7 @@ namespace FormsToolkit.iOS.Renderers
 
             control.Delegate = new RecyclerViewDelegateFlowLayout(this);
 
-            control.TranslatesAutoresizingMaskIntoConstraints = false;
+            control.TranslatesAutoresizingMaskIntoConstraints = true;
             control.AlwaysBounceHorizontal = false;
             control.AlwaysBounceVertical = true;
 
@@ -94,13 +94,18 @@ namespace FormsToolkit.iOS.Renderers
             // Convert
             Platform.SetRenderer(view, Platform.CreateRenderer(view));
             var viewRenderer = Platform.GetRenderer(view);
+
             var eView = viewRenderer.Element;
             var iView = viewRenderer.NativeView;
 
             var measure = viewRenderer.Element.Measure(Element.Width, double.PositiveInfinity, MeasureFlags.IncludeMargins);
-
-            eView.Layout(new Rectangle(0, 0, Element.Width, measure.Request.Height));
             iView.Frame = new CGRect(0, 0, Element.Width, measure.Request.Height);
+
+            iView.AutoresizingMask = UIViewAutoresizing.All;
+            iView.ContentMode = UIViewContentMode.ScaleToFill;
+            eView.Layout(iView.Frame.ToRectangle());
+
+            iView.SetNeedsLayout();
 
             return iView;
         }

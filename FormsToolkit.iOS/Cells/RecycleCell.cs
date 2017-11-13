@@ -19,5 +19,10 @@ namespace FormsToolkit.iOS.Cells
         {
         }
 
+        public override UICollectionViewLayoutAttributes PreferredLayoutAttributesFittingAttributes(UICollectionViewLayoutAttributes layoutAttributes)
+        {
+            return layoutAttributes;
+        }
+
     }
 }
