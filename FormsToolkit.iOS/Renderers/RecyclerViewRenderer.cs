@@ -21,7 +21,9 @@ namespace FormsToolkit.iOS.Renderers
 {
     public class RecyclerViewRenderer : ViewRenderer<RecyclerView, UICollectionView>
     {
-        
+
+        Dictionary<object, UIView> _viewCache = new Dictionary<object, UIView>();
+
         public static void Init()
         {
             var dt = DateTime.Now;
@@ -88,6 +90,10 @@ namespace FormsToolkit.iOS.Renderers
 
         internal UIView GetNativeViewForItem(UICollectionView collectionView, object item)
         {
+            // Check cache
+            if (_viewCache.ContainsKey(item))
+                return _viewCache[item];
+
             // Generate from DT
             var view = Element.ItemTemplate.GenerateView(Element, item);
 
@@ -107,6 +113,7 @@ namespace FormsToolkit.iOS.Renderers
 
             iView.SetNeedsLayout();
 
+            _viewCache.Add(item, iView);
             return iView;
         }
 

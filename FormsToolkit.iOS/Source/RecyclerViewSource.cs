@@ -37,10 +37,13 @@ namespace FormsToolkit.iOS.Source
             var item = renderer.GetItemFromNSIndex(indexPath);
             var nativeView = renderer.GetNativeViewForItem(collectionView, item);
 
-            // Merge
-            var frame = renderer.GenerateFrameForCell(nativeView, indexPath);
+            if (cell.Subviews.Length > 0)
+            {
+                foreach (var subView in cell.Subviews)
+                    subView.RemoveFromSuperview();
+            }
 
-            cell.Frame = frame;
+            // Merge
             cell.AddSubview(nativeView);
 
             // Return
