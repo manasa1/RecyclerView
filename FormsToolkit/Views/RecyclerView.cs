@@ -52,6 +52,12 @@ namespace FormsToolkit.Views
             typeof(DataTemplate),
             typeof(RecyclerView),
             null);
+
+        public static readonly BindableProperty CanReorderProperty = BindableProperty.Create(
+            nameof(CanReorder),
+            typeof(bool),
+            typeof(RecyclerView),
+            false);
 #endregion
 
 #region Events
@@ -63,6 +69,12 @@ namespace FormsToolkit.Views
 
         public event PropertyChangingEventHandler OnOrientationChanged;
 #endregion
+
+        public bool CanReorder
+        {
+            get => (bool) GetValue(CanReorderProperty);
+            set => SetValue(CanReorderProperty, value);
+        }
 
         public DataTemplate ItemTemplate
         {

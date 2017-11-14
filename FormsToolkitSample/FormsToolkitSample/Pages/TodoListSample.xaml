@@ -4,6 +4,7 @@
              xmlns:c="clr-namespace:FormsToolkitSample.Converters"
              xmlns:s="clr-namespace:FormsToolkitSample.Selectors"
              xmlns:v="clr-namespace:FormsToolkit.Views;assembly=FormsToolkit"
+             Title="Planner"
              x:Class="FormsToolkitSample.Pages.TodoListSample">
 
     <ContentPage.Resources>

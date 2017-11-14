@@ -14,7 +14,16 @@ namespace FormsToolkitSample
         {
             InitializeComponent();
             
-            MainPage = new TodoListSample();
+            var navigation = new NavigationPage(new TodoListSample());
+
+            navigation.ToolbarItems.Add(new ToolbarItem("Settings", "Settings", HandleSettingsRequest));
+
+            MainPage = navigation;
+        }
+
+        void HandleSettingsRequest()
+        {
+
         }
 
         protected override void OnStart()
