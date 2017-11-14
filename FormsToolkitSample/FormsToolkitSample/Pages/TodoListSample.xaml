@@ -61,7 +61,7 @@
             </Grid.ColumnDefinitions>
 
             <Picker x:Name="FilterPicker" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"
-                    SelectedIndexChanged="OnSelectedIndexChanged">
+                    SelectedIndexChanged="OnSelectedIndexChanged" SelectedItem="{Binding Filter}">
                 <Picker.Items>
                     <x:String>All</x:String>
                     <x:String>Todo</x:String>

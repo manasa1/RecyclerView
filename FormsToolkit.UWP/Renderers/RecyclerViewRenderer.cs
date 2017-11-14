@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using FormsToolkit.Views;
 using FormsToolkit.UWP.Views;
 using FormsToolkit.UWP.Renderers;
-using FormsToolkit.UWP.Models;
 
 using Windows.UI.Xaml;
 using System.ComponentModel;
@@ -39,12 +38,15 @@ namespace FormsToolkit.UWP.Renderers
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"Property changed: {e.PropertyName}");
-
             switch (e.PropertyName)
             {
                 case nameof(Element.BackgroundColor):
                     SetBackgroundColor();
+                    break;
+
+                case nameof(RecyclerView.ItemsSource):
+                case nameof(RecyclerView.ItemTemplate):
+                    HandleOnItemSourceChanged();
                     break;
 
                 default:
@@ -61,40 +63,20 @@ namespace FormsToolkit.UWP.Renderers
 
         void SetupElement(RecyclerView element)
         {
-            element.OnItemsSourceChanged += HandleOnItemsSourceChanged;
-
             SetBackgroundColor();
-            HandleOnItemsSourceChanged(element, null);
-            HandleOnItemTemplateChanged(element, null);
+            HandleOnItemSourceChanged();
         }
 
         void DestroyElement(RecyclerView element)
         {
-            element.OnItemsSourceChanged -= HandleOnItemsSourceChanged;
         }
 
-        void HandleOnItemTemplateChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
-        {
-            // TODO - Reload Content
-        }
-
-        void HandleOnItemsSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        void HandleOnItemSourceChanged()
         {
             if (Element?.ItemsSource == null)
                 return;
 
-            List<ContextRendererContainer<RecyclerViewRenderer>> newSource = new List<ContextRendererContainer<RecyclerViewRenderer>>();
-
-            foreach (var item in Element.ItemsSource)
-            {
-                newSource.Add(new ContextRendererContainer<RecyclerViewRenderer>()
-                {
-                    Context = item,
-                    Renderer = this
-                });
-            }
-
-            ((NativeRecyclerListView)Control).EmbeddedList.ItemsSource = newSource;
+            ((NativeRecyclerListView)Control).EmbeddedList.ItemsSource = Element.ItemsSource;
         }
 
         void SetBackgroundColor()

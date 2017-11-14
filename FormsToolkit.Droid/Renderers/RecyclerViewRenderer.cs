@@ -37,19 +37,40 @@ namespace FormsToolkit.Droid.Renderers
                 DestroyElement(e.OldElement);
         }
 
-        void SetupElement(FormsToolkit.Views.RecyclerView newElement)
+        void SetupElement(Views.RecyclerView element)
         {
-            newElement.OnItemsSourceChanged += HandleItemSourceChanged;
+            element.PropertyChanging += OnElementPropertyChanging;
+
+            // Initial
+            HandleItemSourceChanged();
         }
 
-        void DestroyElement(FormsToolkit.Views.RecyclerView oldElement)
+        void DestroyElement(Views.RecyclerView element)
         {
-            oldElement.OnItemsSourceChanged -= HandleItemSourceChanged;
+            element.PropertyChanging -= OnElementPropertyChanging;
         }
 
-        void HandleItemSourceChanged(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        void OnElementPropertyChanging(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
         {
-            // TODO - Redraw
+            // Cleanup events
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Create events
+
+            // React
+            switch (e.PropertyName)
+            {
+                case nameof(Element.ItemsSource):
+                case nameof(Element.ItemTemplate):
+                    HandleItemSourceChanged();
+                    break;
+            }
+        }
+
+        void HandleItemSourceChanged()
+        {
             Adapter?.NotifyDataSetChanged();
         }
 

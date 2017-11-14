@@ -17,8 +17,7 @@ namespace FormsToolkit.Views
             nameof(ItemsSource),
             typeof(IEnumerable),
             typeof(RecyclerView),
-            null,
-            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnItemsSourceChanged?.Invoke((RecyclerView) bindable, new PropertyChangingEventArgs(nameof(ItemsSource))));
+            null);
 
         public static readonly BindableProperty RowHeightProperty = BindableProperty.Create(
             nameof(RowHeight),
@@ -52,8 +51,7 @@ namespace FormsToolkit.Views
             nameof(ItemTemplate),
             typeof(DataTemplate),
             typeof(RecyclerView),
-            null,
-            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnTemplateChanged?.Invoke(bindable, new PropertyChangingEventArgs(nameof(ItemTemplate))));
+            null);
 #endregion
 
 #region Events
@@ -63,11 +61,7 @@ namespace FormsToolkit.Views
 
         public event PropertyChangingEventHandler OnHasUnevenRowsChanged;
 
-        public event PropertyChangingEventHandler OnItemsSourceChanged;
-
         public event PropertyChangingEventHandler OnOrientationChanged;
-
-        public event PropertyChangingEventHandler OnTemplateChanged;
 #endregion
 
         public DataTemplate ItemTemplate
