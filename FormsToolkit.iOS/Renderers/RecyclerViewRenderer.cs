@@ -26,6 +26,14 @@ namespace FormsToolkit.iOS.Renderers
 
         Dictionary<object, UIView> _viewCache = new Dictionary<object, UIView>();
 
+        internal RecyclerViewDelegateFlowLayout ViewDelegate { get; set; }
+
+        internal RecyclerViewDragDelegate DragDelegate { get; set; }
+
+        internal RecyclerViewDropDelegate DropDelegate { get; set; }
+
+        internal RecyclerViewSource DataSource { get; set; }
+
         public static void Init()
         {
             var dt = DateTime.Now;
@@ -73,13 +81,20 @@ namespace FormsToolkit.iOS.Renderers
             var control = new RecyclerUICollectionView(this, new CGRect(Element.X, Element.Y, Element.Width, Element.Height), new UICollectionViewFlowLayout());
 
             control.RegisterClassForCell(typeof(RecycleCell), RecycleCell.Key);
-            control.DataSource = new RecyclerViewSource(this);
+            
+            // Initialize
+            DataSource = new RecyclerViewSource(this);
+            DragDelegate = new RecyclerViewDragDelegate(this);
+            DropDelegate = new RecyclerViewDropDelegate(this);
+            ViewDelegate = new RecyclerViewDelegateFlowLayout(this);
+
+            // Assign
+            control.DataSource = DataSource;
+            control.DragDelegate = DragDelegate;
+            control.DropDelegate = DropDelegate;
+            control.Delegate = ViewDelegate;
 
             control.DragInteractionEnabled = true;
-            control.DragDelegate = new RecyclerViewDragDelegate(this);
-            control.DropDelegate = new RecyclerViewDropDelegate();
-            control.Delegate = new RecyclerViewDelegateFlowLayout(this);
-
             control.TranslatesAutoresizingMaskIntoConstraints = true;
             control.AlwaysBounceHorizontal = false;
             control.AlwaysBounceVertical = true;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Foundation;
 using UIKit;
 using FormsToolkit.iOS.Renderers;
@@ -22,9 +20,10 @@ namespace FormsToolkit.iOS.Delegates
         {
             if (!RendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
                 return new UIDragItem[] { };
-            
-            var data = NSData.FromString("Hello World!", NSStringEncoding.UTF8);
+
             var itemProvider = new NSItemProvider();
+            var data = NSData.FromString($"{indexPath.Row}#{indexPath.Section}", NSStringEncoding.UTF8);
+
             itemProvider.RegisterDataRepresentation(UTType.PlainText, NSItemProviderRepresentationVisibility.All, (completion) => {
                 completion(data, null);
                 return null;
