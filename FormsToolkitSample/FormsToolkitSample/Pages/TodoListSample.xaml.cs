@@ -20,7 +20,13 @@ namespace FormsToolkitSample.Pages
             BindingContext = new TodoViewModel();
 			InitializeComponent ();
 		}
-	}
+
+        void OnSelectedIndexChanged(object sender, PropertyChangedEventArgs args)
+        {
+            (BindingContext as TodoViewModel).Filter = FilterPicker.SelectedItem as string;
+        }
+
+    }
 
     public class TodoViewModel : INotifyPropertyChanged
     {
@@ -31,11 +37,37 @@ namespace FormsToolkitSample.Pages
 
         public IList<Todo> Todos
         {
-            get => todos;
+            get => ReturnWithFilter();
             set
             {
                 todos = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Todos)));
+            }
+        }
+
+        private IList<Todo> ReturnWithFilter()
+        {
+            switch (Filter)
+            {
+                case "All":
+                    return todos;
+                case "Todo":
+                    return todos.Where(t => !t.Completed).ToList();
+                default:
+                    return todos.Where(t => t.Completed).ToList();
+            }
+        }
+
+        string filter = "All";
+
+        public string Filter
+        {
+            get => filter;
+            set
+            {
+                filter = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Todos)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Filter)));
             }
         }
 

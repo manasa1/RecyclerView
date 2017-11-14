@@ -39,6 +39,8 @@ namespace FormsToolkit.UWP.Renderers
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine($"Property changed: {e.PropertyName}");
+
             switch (e.PropertyName)
             {
                 case nameof(Element.BackgroundColor):

@@ -1,7 +1,4 @@
-﻿using FormsToolkitSample.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FormsToolkitSample.Pages;
 using Xamarin.Forms;
 
 namespace FormsToolkitSample.Selectors
@@ -17,9 +14,16 @@ namespace FormsToolkitSample.Selectors
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            Todo todo = item as Todo; // TODO TODOOOOOOOOOO TODO TODO.
-
-
+            if (container.BindingContext is TodoViewModel context)
+            {
+                switch (context.Filter)
+                {
+                    case "Todo":
+                        return TodoTemplate;
+                    case "Completed":
+                        return CompletedTemplate;
+                }
+            }
 
             return AllTemplate;
         }

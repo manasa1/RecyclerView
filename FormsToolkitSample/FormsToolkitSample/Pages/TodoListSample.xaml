@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:FormsToolkitSample.Converters"
              xmlns:s="clr-namespace:FormsToolkitSample.Selectors"
              xmlns:v="clr-namespace:FormsToolkit.Views;assembly=FormsToolkit"
              x:Class="FormsToolkitSample.Pages.TodoListSample">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+
+            <c:TodoColorConverter x:Key="TodoColorConverter" />
 
             <DataTemplate x:Key="AllTemplate">
                 <Grid HeightRequest="50">
@@ -18,18 +21,24 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <BoxView Grid.Column="0" Grid.Row="0" BackgroundColor="Green" />
+                    <BoxView Grid.Column="0" Grid.Row="0" BackgroundColor="{Binding Completed, Converter={StaticResource Key=TodoColorConverter}}" />
                     <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center"
                            HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="CompletedTemplate">
-                <Grid></Grid>
+                <Grid HeightRequest="50">
+                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center"
+                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="TodoTemplate">
-                <Grid></Grid>
+                <Grid HeightRequest="50">
+                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center"
+                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                </Grid>
             </DataTemplate>
 
             <s:TodoSelector x:Key="TodoSelector"
@@ -49,16 +58,18 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                
             </Grid.ColumnDefinitions>
 
-            <Button Text="To Be Completed" Grid.Row="0" Grid.Column="0" />
-            <Button Text="Completed" Grid.Row="0" Grid.Column="1" />
-            <Button Text="All" Grid.Row="0" Grid.Column="2" />
+            <Picker x:Name="FilterPicker" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"
+                    SelectedIndexChanged="OnSelectedIndexChanged">
+                <Picker.Items>
+                    <x:String>All</x:String>
+                    <x:String>Todo</x:String>
+                    <x:String>Completed</x:String>
+                </Picker.Items>
+            </Picker>
 
-            <v:RecyclerView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver"
+            <v:RecyclerView Grid.Row="1" Grid.Column="0" BackgroundColor="Silver"
                             ItemsSource="{Binding Todos}" ItemTemplate="{StaticResource Key=TodoSelector}" />
 
         </Grid>    
