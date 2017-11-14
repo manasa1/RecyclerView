@@ -17,6 +17,8 @@ using FormsToolkit.iOS.Cells;
 using FormsToolkit.iOS.Delegates;
 using FormsToolkit.iOS.Views;
 using System.ComponentModel;
+using System.Collections;
+using System.Collections.Specialized;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.iOS.Renderers
@@ -27,10 +29,6 @@ namespace FormsToolkit.iOS.Renderers
         Dictionary<object, UIView> _viewCache = new Dictionary<object, UIView>();
 
         internal RecyclerViewDelegateFlowLayout ViewDelegate { get; set; }
-
-        internal RecyclerViewDragDelegate DragDelegate { get; set; }
-
-        internal RecyclerViewDropDelegate DropDelegate { get; set; }
 
         internal RecyclerViewSource DataSource { get; set; }
 
@@ -55,25 +53,50 @@ namespace FormsToolkit.iOS.Renderers
             base.OnElementChanged(e);
         }
 
+        void OnElementPropertyChanging(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        {
+
+        }
+
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
-            {
-                case nameof(RecyclerView.ItemsSource):
-                    HandleOnItemSourceChanged();
-                    break;
-            }
-
             base.OnElementPropertyChanged(sender, e);
         }
 
         void DestroyElement(RecyclerView element)
         {
+            element.OnItemSourceChanged -= OnItemSourceChanged;
+            element.PropertyChanging -= OnElementPropertyChanging;
         }
 
         void SetupElement(RecyclerView element)
         {
-            HandleOnItemSourceChanged();
+            element.OnItemSourceChanged += OnItemSourceChanged;
+            element.PropertyChanging += OnElementPropertyChanging;
+
+            OnItemSourceChanged(element, null, element.ItemsSource);
+        }
+
+        void OnItemSourceChanged(object sender, object oldSource, object newSource)
+        {
+            if (oldSource != null)
+            {
+                // TODO - Destroy
+            }
+
+            IEnumerable source = newSource as IEnumerable;
+
+            if (source is INotifyCollectionChanged)
+            {
+                var ncc = source as INotifyCollectionChanged;
+                ncc.CollectionChanged += OnItemCollectionChanged;
+            }
+
+            Control.ReloadData();
+        }
+
+        void OnItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
         }
 
         void SetupControl()
@@ -84,14 +107,10 @@ namespace FormsToolkit.iOS.Renderers
             
             // Initialize
             DataSource = new RecyclerViewSource(this);
-            DragDelegate = new RecyclerViewDragDelegate(this);
-            DropDelegate = new RecyclerViewDropDelegate(this);
             ViewDelegate = new RecyclerViewDelegateFlowLayout(this);
 
             // Assign
             control.DataSource = DataSource;
-            control.DragDelegate = DragDelegate;
-            control.DropDelegate = DropDelegate;
             control.Delegate = ViewDelegate;
 
             control.DragInteractionEnabled = true;
@@ -100,11 +119,6 @@ namespace FormsToolkit.iOS.Renderers
             control.AlwaysBounceVertical = true;
 
             SetNativeControl(control);
-        }
-
-        void HandleOnItemSourceChanged()
-        {
-            Control.ReloadData();
         }
 
         internal CGRect GenerateFrameForCell(UIView nativeView, NSIndexPath indexPath)

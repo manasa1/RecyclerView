@@ -17,7 +17,8 @@ namespace FormsToolkit.Views
             nameof(ItemsSource),
             typeof(IEnumerable),
             typeof(RecyclerView),
-            null);
+            null,
+            propertyChanged: (bindable, oldValue, newValue) => ((RecyclerView)bindable).OnItemSourceChanged?.Invoke(bindable, oldValue, newValue));
 
         public static readonly BindableProperty RowHeightProperty = BindableProperty.Create(
             nameof(RowHeight),
@@ -58,9 +59,13 @@ namespace FormsToolkit.Views
             typeof(bool),
             typeof(RecyclerView),
             false);
-#endregion
+        #endregion
 
-#region Events
+        #region Delegates
+        public delegate void ItemSourceDelegate(object sender, object oldSource, object newSource);
+        #endregion
+
+        #region Events
         public event PropertyChangingEventHandler OnRowHeightChanged;
 
         public event PropertyChangingEventHandler OnRowWidthChanged;
@@ -68,6 +73,8 @@ namespace FormsToolkit.Views
         public event PropertyChangingEventHandler OnHasUnevenRowsChanged;
 
         public event PropertyChangingEventHandler OnOrientationChanged;
+
+        public event ItemSourceDelegate OnItemSourceChanged;
 #endregion
 
         public bool CanReorder

@@ -16,7 +16,7 @@ using Xamarin.Forms;
 
 namespace FormsToolkit.iOS.Source
 {
-    public class RecyclerViewSource : UICollectionViewSource
+    public class RecyclerViewSource : UICollectionViewDataSource
     {
 
         WeakReference<RecyclerViewRenderer> _rendererReference;
@@ -48,6 +48,10 @@ namespace FormsToolkit.iOS.Source
 
             // Return
             return cell;
+        }
+
+        public override void MoveItem(UICollectionView collectionView, NSIndexPath sourceIndexPath, NSIndexPath destinationIndexPath)
+        {
         }
 
         public override bool CanMoveItem(UICollectionView collectionView, NSIndexPath indexPath)
