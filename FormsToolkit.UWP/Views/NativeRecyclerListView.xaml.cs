@@ -21,6 +21,10 @@ namespace FormsToolkit.UWP.Views
         {
             RendererReference = new WeakReference<RecyclerViewRenderer>(renderer);
             InitializeComponent();
+
+            EmbeddedList.CanReorderItems = true;
+            EmbeddedList.CanDragItems = true;
+            EmbeddedList.AllowDrop = true;
         }
 
         void OnTemplateDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

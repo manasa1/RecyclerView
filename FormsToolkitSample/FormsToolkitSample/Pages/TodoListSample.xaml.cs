@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using FormsToolkitSample.Models;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace FormsToolkitSample.Pages
 {
@@ -81,7 +82,7 @@ namespace FormsToolkitSample.Pages
 
         async void RefreshList()
         {
-            Todos = await TodoService.ListAllAsync();
+            Todos = new ObservableCollection<Todo>(await TodoService.ListAllAsync());
         }
     }
 }
