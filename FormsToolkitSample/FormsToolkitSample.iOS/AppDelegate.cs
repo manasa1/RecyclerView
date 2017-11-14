@@ -25,7 +25,7 @@ namespace FormsToolkitSample.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
-
+            
             RecyclerViewRenderer.Init();
 
             return base.FinishedLaunching(app, options);

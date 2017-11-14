@@ -50,6 +50,11 @@ namespace FormsToolkit.iOS.Source
             return cell;
         }
 
+        public override bool CanMoveItem(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            return true;
+        }
+
         public override nint NumberOfSections(UICollectionView collectionView)
         {
             if (!_rendererReference.TryGetTarget(out RecyclerViewRenderer renderer))

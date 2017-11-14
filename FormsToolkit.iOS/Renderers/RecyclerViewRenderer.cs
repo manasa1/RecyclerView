@@ -15,6 +15,8 @@ using FormsToolkit.iOS.Renderers;
 using FormsToolkit.iOS.Source;
 using FormsToolkit.iOS.Cells;
 using FormsToolkit.iOS.Delegates;
+using FormsToolkit.iOS.Views;
+using System.ComponentModel;
 
 [assembly: ExportRenderer(typeof(RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.iOS.Renderers
@@ -45,25 +47,37 @@ namespace FormsToolkit.iOS.Renderers
             base.OnElementChanged(e);
         }
 
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(RecyclerView.ItemsSource):
+                    HandleOnItemSourceChanged();
+                    break;
+            }
+
+            base.OnElementPropertyChanged(sender, e);
+        }
+
         void DestroyElement(RecyclerView element)
         {
-            element.OnItemsSourceChanged -= HandleOnItemsSourceChanged;
         }
 
         void SetupElement(RecyclerView element)
         {
-            element.OnItemsSourceChanged += HandleOnItemsSourceChanged;
-
-            HandleOnItemsSourceChanged(null, null);
+            HandleOnItemSourceChanged();
         }
 
         void SetupControl()
         {
-            var control = new UICollectionView(new CGRect(Element.X, Element.Y, Element.Width, Element.Height), new UICollectionViewFlowLayout());
+            var control = new RecyclerUICollectionView(this, new CGRect(Element.X, Element.Y, Element.Width, Element.Height), new UICollectionViewFlowLayout());
 
             control.RegisterClassForCell(typeof(RecycleCell), RecycleCell.Key);
             control.DataSource = new RecyclerViewSource(this);
 
+            control.DragInteractionEnabled = true;
+            control.DragDelegate = new RecyclerViewDragDelegate(this);
+            control.DropDelegate = new RecyclerViewDropDelegate();
             control.Delegate = new RecyclerViewDelegateFlowLayout(this);
 
             control.TranslatesAutoresizingMaskIntoConstraints = true;
@@ -73,7 +87,7 @@ namespace FormsToolkit.iOS.Renderers
             SetNativeControl(control);
         }
 
-        void HandleOnItemsSourceChanged(object sender, PropertyChangingEventArgs e)
+        void HandleOnItemSourceChanged()
         {
             Control.ReloadData();
         }

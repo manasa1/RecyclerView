@@ -6,15 +6,22 @@ using FormsToolkit.Droid.Renderers;
 using System;
 using FormsToolkit.Views;
 using Android.Support.V7.Widget;
+using FormsToolkit.Droid.Helpers;
+using Android.Support.V7.Widget.Helper;
 
 [assembly:ExportRenderer(typeof(FormsToolkit.Views.RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.Droid.Renderers
 {
-    public class RecyclerViewRenderer : ViewRenderer<FormsToolkit.Views.RecyclerView, Android.Support.V7.Widget.RecyclerView>
+    public class RecyclerViewRenderer : ViewRenderer<Views.RecyclerView, Android.Support.V7.Widget.RecyclerView>
     {
 
-        RecyclerAdapter Adapter;
-        LinearLayoutManager Manager;
+        internal RecyclerAdapter Adapter { get; set; }
+
+        internal LinearLayoutManager Manager { get; set; }
+
+        internal ItemTouchHelper TouchHelper { get; set; }
+
+        internal RecyclerTouchHelper TouchHelperCallback { get; set; }
 
         public static void Init()
         {
@@ -80,9 +87,12 @@ namespace FormsToolkit.Droid.Renderers
             var recycler = new Android.Support.V7.Widget.RecyclerView(Forms.Context);
             Adapter = new RecyclerAdapter(this);
             Manager = new LinearLayoutManager(Forms.Context);
+            TouchHelperCallback = new RecyclerTouchHelper(this);
+            TouchHelper = new ItemTouchHelper(TouchHelperCallback);
 
             // Configure
             Manager.AutoMeasureEnabled = true;
+            TouchHelper.AttachToRecyclerView(recycler);
 
             recycler.SetLayoutManager(Manager);
             recycler.SetAdapter(Adapter);
