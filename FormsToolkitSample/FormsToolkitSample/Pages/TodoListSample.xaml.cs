@@ -67,7 +67,7 @@ namespace FormsToolkitSample.Pages
             TodoService = DependencyService.Get<ITodoService>(DependencyFetchTarget.GlobalInstance);
 
             AllTasks = new ObservableCollection<Todo>();
-            RefreshList();
+            RefreshListAsync().ConfigureAwait(false);
         }
 
         internal void RemoveTask(Todo todo)
@@ -75,7 +75,7 @@ namespace FormsToolkitSample.Pages
             AllTasks.Remove(todo);
         }
 
-        async void RefreshList()
+        async Task RefreshListAsync()
         {
             AllTasks = new ObservableCollection<Todo>(await TodoService.ListAllAsync());
         }
