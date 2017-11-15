@@ -7,12 +7,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
+using FormsToolkit.Views;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace FormsToolkit.UWP.Views
 {
-    public sealed partial class NativeRecyclerListView : UserControl
+    public sealed partial class NativeRecyclerListView : UserControl, IDisposable
     {
 
         public WeakReference<RecyclerViewRenderer> RendererReference { get; set; }
@@ -22,9 +23,37 @@ namespace FormsToolkit.UWP.Views
             RendererReference = new WeakReference<RecyclerViewRenderer>(renderer);
             InitializeComponent();
 
+            SetupElement(renderer.Element);
+
             EmbeddedList.CanReorderItems = true;
             EmbeddedList.CanDragItems = true;
             EmbeddedList.AllowDrop = true;
+        }
+
+        void SetupElement(RecyclerView element)
+        {
+            if (element == null)
+                return;
+
+            element.OnOrientationChanged += OnOrientationChanged;
+
+            OnOrientationChanged(element, null);
+        }
+
+        void DestroyElement(RecyclerView element)
+        {
+            if (element == null)
+                return;
+
+            element.OnOrientationChanged -= OnOrientationChanged;
+        }
+
+        void OnOrientationChanged(object sender, PropertyChangingEventArgs e)
+        {
+            var element = sender as RecyclerView;
+            if (element == null) return;
+            
+
         }
 
         void OnTemplateDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
@@ -74,6 +103,12 @@ namespace FormsToolkit.UWP.Views
                 Height = 200,
                 Width = 300
             };
+        }
+
+        public void Dispose()
+        {
+            RendererReference.TryGetTarget(out RecyclerViewRenderer renderer);
+            DestroyElement(renderer?.Element);
         }
     }
 }

@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Support.V7.Widget;
-using FormsToolkit.Droid.Adapters;
+
 using FormsToolkit.Droid.Renderers;
 
 namespace FormsToolkit.Droid.Helpers
@@ -31,6 +22,20 @@ namespace FormsToolkit.Droid.Helpers
             const int dragFlags = ItemTouchHelper.Up | ItemTouchHelper.Down;
             const int swipeFlags = ItemTouchHelper.Start | ItemTouchHelper.End;
             return MakeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        public override bool IsItemViewSwipeEnabled => false;
+        }
+
+        public override bool IsLongPressDragEnabled
+        {
+            get
+            {
+                if (!RendererReference.TryGetTarget(out RecyclerViewRenderer renderer))
+                    return false;
+
+                return renderer.Element.CanReorder;
+            }
         }
 
         public override bool OnMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target)
