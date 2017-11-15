@@ -23,7 +23,7 @@ namespace FormsToolkitSample
 
         void HandleSettingsRequest()
         {
-
+            ((NavigationPage)App.Current.MainPage).PushAsync(new SettingsPage());
         }
 
         protected override void OnStart()

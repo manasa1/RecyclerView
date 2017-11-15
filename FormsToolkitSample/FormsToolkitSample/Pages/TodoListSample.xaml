@@ -70,7 +70,7 @@
                 </Picker.Items>
             </Picker>
 
-            <v:RecyclerView Grid.Row="1" Grid.Column="0" BackgroundColor="Silver"
+            <v:RecyclerView x:Name="Recycler" Grid.Row="1" Grid.Column="0" BackgroundColor="Silver"
                             ItemsSource="{Binding Todos}" ItemTemplate="{StaticResource Key=TodoSelector}" />
 
         </Grid>    

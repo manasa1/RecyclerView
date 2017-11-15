@@ -33,7 +33,7 @@ namespace FormsToolkit.iOS.Views
 
             var location = LongPressGestureRecognizer.LocationInView(this);
             var view = LongPressGestureRecognizer.View;
-
+            
             switch (LongPressGestureRecognizer.State)
             {
                 case UIGestureRecognizerState.Began:

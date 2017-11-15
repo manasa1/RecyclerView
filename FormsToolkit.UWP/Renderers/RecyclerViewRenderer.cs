@@ -49,6 +49,10 @@ namespace FormsToolkit.UWP.Renderers
                     HandleOnItemSourceChanged();
                     break;
 
+                case nameof(RecyclerView.CanReorder):
+                    HandleOnReorderChanged();
+                    break;
+
                 default:
                     break;
             }
@@ -64,11 +68,20 @@ namespace FormsToolkit.UWP.Renderers
         void SetupElement(RecyclerView element)
         {
             SetBackgroundColor();
+            HandleOnReorderChanged();
             HandleOnItemSourceChanged();
         }
 
         void DestroyElement(RecyclerView element)
         {
+        }
+
+        void HandleOnReorderChanged()
+        {
+            if (Element == null || Control == null)
+                return;
+
+            ((NativeRecyclerListView)Control).EmbeddedList.CanReorderItems = Element.CanReorder;
         }
 
         void HandleOnItemSourceChanged()

@@ -16,15 +16,26 @@ namespace FormsToolkitSample.Pages
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TodoListSample : ContentPage
 	{
+
+        readonly ISettingsService SettingsService;
+
 		public TodoListSample ()
 		{
+            SettingsService = DependencyService.Get<ISettingsService>();
             BindingContext = new TodoViewModel();
+
 			InitializeComponent ();
 		}
 
         void OnSelectedIndexChanged(object sender, PropertyChangedEventArgs args)
         {
             (BindingContext as TodoViewModel).Filter = FilterPicker.SelectedItem as string;
+        }
+
+        protected override void OnAppearing()
+        {
+            Recycler.CanReorder = SettingsService.CanReorder;
+            base.OnAppearing();
         }
 
     }
