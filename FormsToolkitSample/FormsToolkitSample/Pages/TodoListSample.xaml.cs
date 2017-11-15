@@ -27,15 +27,18 @@ namespace FormsToolkitSample.Pages
 			InitializeComponent ();
 		}
 
-        void OnSelectedIndexChanged(object sender, PropertyChangedEventArgs args)
-        {
-            (BindingContext as TodoViewModel).Filter = FilterPicker.SelectedItem as string;
-        }
-
         protected override void OnAppearing()
         {
             Recycler.CanReorder = SettingsService.CanReorder;
             base.OnAppearing();
+        }
+
+        void OnDeleteItemRequest(object sender, PropertyChangedEventArgs args)
+        {
+            var button = sender as Button;
+            var context = button.BindingContext;
+
+            ((TodoViewModel)BindingContext).RemoveTask(context as Todo);
         }
 
     }
@@ -45,41 +48,15 @@ namespace FormsToolkitSample.Pages
 
         readonly ITodoService TodoService;
 
-        IList<Todo> todos;
+        ObservableCollection<Todo> _allTasks;
 
-        public IList<Todo> Todos
+        public ObservableCollection<Todo> AllTasks
         {
-            get => ReturnWithFilter();
+            get => _allTasks;
             set
             {
-                todos = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Todos)));
-            }
-        }
-
-        private IList<Todo> ReturnWithFilter()
-        {
-            switch (Filter)
-            {
-                case "All":
-                    return todos;
-                case "Todo":
-                    return todos.Where(t => !t.Completed).ToList();
-                default:
-                    return todos.Where(t => t.Completed).ToList();
-            }
-        }
-
-        string filter = "All";
-
-        public string Filter
-        {
-            get => filter;
-            set
-            {
-                filter = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Todos)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Filter)));
+                _allTasks = value;
+                RaisePropertyChanged(nameof(AllTasks));
             }
         }
 
@@ -88,12 +65,24 @@ namespace FormsToolkitSample.Pages
         public TodoViewModel()
         {
             TodoService = DependencyService.Get<ITodoService>(DependencyFetchTarget.GlobalInstance);
+
+            AllTasks = new ObservableCollection<Todo>();
             RefreshList();
+        }
+
+        internal void RemoveTask(Todo todo)
+        {
+            AllTasks.Remove(todo);
         }
 
         async void RefreshList()
         {
-            Todos = new ObservableCollection<Todo>(await TodoService.ListAllAsync());
+            AllTasks = new ObservableCollection<Todo>(await TodoService.ListAllAsync());
+        }
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

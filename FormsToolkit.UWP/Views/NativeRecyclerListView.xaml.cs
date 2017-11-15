@@ -52,8 +52,6 @@ namespace FormsToolkit.UWP.Views
         {
             var element = sender as RecyclerView;
             if (element == null) return;
-            
-
         }
 
         void OnTemplateDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)

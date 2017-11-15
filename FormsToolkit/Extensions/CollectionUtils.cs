@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace FormsToolkit.Extensions
 {
@@ -37,6 +40,6 @@ namespace FormsToolkit.Extensions
 
             return default(T);
         }
-
+        
     }
 }

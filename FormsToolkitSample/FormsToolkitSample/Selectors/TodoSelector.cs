@@ -1,4 +1,4 @@
-﻿using FormsToolkitSample.Pages;
+﻿using FormsToolkitSample.Models;
 using Xamarin.Forms;
 
 namespace FormsToolkitSample.Selectors
@@ -6,26 +6,15 @@ namespace FormsToolkitSample.Selectors
     public class TodoSelector : DataTemplateSelector
     {
 
-        public DataTemplate AllTemplate { get; set; }
-
         public DataTemplate CompletedTemplate { get; set; }
 
         public DataTemplate TodoTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (container.BindingContext is TodoViewModel context)
-            {
-                switch (context.Filter)
-                {
-                    case "Todo":
-                        return TodoTemplate;
-                    case "Completed":
-                        return CompletedTemplate;
-                }
-            }
-
-            return AllTemplate;
+            if (item is Todo todo)
+                return todo.Completed ? CompletedTemplate : TodoTemplate;
+            return TodoTemplate;
         }
     }
 }

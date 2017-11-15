@@ -12,68 +12,54 @@
 
             <c:TodoColorConverter x:Key="TodoColorConverter" />
 
-            <DataTemplate x:Key="AllTemplate">
-                <Grid HeightRequest="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+            <DataTemplate x:Key="CompletedTemplate">
+                <Grid HeightRequest="75" BackgroundColor="Green" Padding="10, 0, 10, 0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
 
-                    <BoxView Grid.Column="0" Grid.Row="0" BackgroundColor="{Binding Completed, Converter={StaticResource Key=TodoColorConverter}}" />
-                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center"
+                    <Label Text="{Binding Title}" TextColor="White" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalTextAlignment="Center"
                            HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
-                </Grid>
-            </DataTemplate>
 
-            <DataTemplate x:Key="CompletedTemplate">
-                <Grid HeightRequest="50">
-                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center"
-                           HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                    <Button Text="Undo" Grid.Row="0" Grid.Column="1" />
+                    <Button Text="Delete" Grid.Row="1" Grid.Column="1" Clicked="OnDeleteItemRequest" />
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="TodoTemplate">
-                <Grid HeightRequest="50">
-                    <Label Text="{Binding Title}" TextColor="Black" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center"
+                <Grid HeightRequest="75" BackgroundColor="Red" Padding="10, 0, 10, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Text="{Binding Title}" TextColor="White" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalTextAlignment="Center"
                            HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+
+                    <Button Text="Complete" Grid.Row="0" Grid.Column="1" />
+                    <Button Text="Delete" Grid.Row="1" Grid.Column="1" Clicked="OnDeleteItemRequest" />
                 </Grid>
             </DataTemplate>
 
             <s:TodoSelector x:Key="TodoSelector"
-                            AllTemplate="{StaticResource Key=AllTemplate}"
                             CompletedTemplate="{StaticResource Key=CompletedTemplate}" 
                             TodoTemplate="{StaticResource Key=TodoTemplate}" />
 
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.Content>
-        <Grid>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="75" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Picker x:Name="FilterPicker" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center"
-                    SelectedIndexChanged="OnSelectedIndexChanged" SelectedItem="{Binding Filter}">
-                <Picker.Items>
-                    <x:String>All</x:String>
-                    <x:String>Todo</x:String>
-                    <x:String>Completed</x:String>
-                </Picker.Items>
-            </Picker>
-
-            <v:RecyclerView x:Name="Recycler" Grid.Row="1" Grid.Column="0" BackgroundColor="Silver"
-                            ItemsSource="{Binding Todos}" ItemTemplate="{StaticResource Key=TodoSelector}" />
-
-        </Grid>    
+        <v:RecyclerView x:Name="Recycler" Grid.Row="1" Grid.Column="0" BackgroundColor="Silver"
+                            ItemsSource="{Binding AllTasks}" ItemTemplate="{StaticResource Key=TodoSelector}" />
     </ContentPage.Content>
     
 </ContentPage>

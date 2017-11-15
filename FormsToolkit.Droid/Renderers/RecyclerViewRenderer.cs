@@ -8,6 +8,7 @@ using FormsToolkit.Views;
 using Android.Support.V7.Widget;
 using FormsToolkit.Droid.Helpers;
 using Android.Support.V7.Widget.Helper;
+using System.Collections.Specialized;
 
 [assembly:ExportRenderer(typeof(FormsToolkit.Views.RecyclerView), typeof(RecyclerViewRenderer))]
 namespace FormsToolkit.Droid.Renderers
@@ -28,7 +29,7 @@ namespace FormsToolkit.Droid.Renderers
             var dt = DateTime.Now;
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<FormsToolkit.Views.RecyclerView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Views.RecyclerView> e)
         {
             base.OnElementChanged(e);
 
@@ -46,39 +47,50 @@ namespace FormsToolkit.Droid.Renderers
 
         void SetupElement(Views.RecyclerView element)
         {
-            element.PropertyChanging += OnElementPropertyChanging;
+            element.OnItemSourceChanged += OnItemSourceChanged;
 
             // Initial
-            HandleItemSourceChanged();
+            OnItemSourceChanged(element, null, element.ItemsSource);
         }
 
         void DestroyElement(Views.RecyclerView element)
         {
-            element.PropertyChanging -= OnElementPropertyChanging;
+            element.OnItemSourceChanged -= OnItemSourceChanged;
         }
 
-        void OnElementPropertyChanging(object sender, Xamarin.Forms.PropertyChangingEventArgs e)
+        void OnItemSourceChanged(object sender, object oldSource, object newSource)
         {
-            // Cleanup events
-        }
-
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // Create events
-
-            // React
-            switch (e.PropertyName)
+            if (oldSource != null)
             {
-                case nameof(Element.ItemsSource):
-                case nameof(Element.ItemTemplate):
-                    HandleItemSourceChanged();
-                    break;
+                if (newSource is INotifyCollectionChanged)
+                    ((INotifyCollectionChanged)newSource).CollectionChanged -= OnItemCollectionChanged;
+            }
+
+            if (newSource != null)
+            {
+                if (newSource is INotifyCollectionChanged)
+                    ((INotifyCollectionChanged)newSource).CollectionChanged += OnItemCollectionChanged;
+
+                Adapter?.NotifyDataSetChanged();
             }
         }
 
-        void HandleItemSourceChanged()
+        void OnItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Adapter?.NotifyDataSetChanged();
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    Adapter?.NotifyItemInserted(e.NewStartingIndex);
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    Adapter?.NotifyItemRemoved(e.OldStartingIndex);
+                    break;
+
+                case NotifyCollectionChangedAction.Move:
+                    Adapter?.NotifyItemMoved(e.OldStartingIndex, e.NewStartingIndex);
+                    break;
+            }
         }
 
         void SetupControl()

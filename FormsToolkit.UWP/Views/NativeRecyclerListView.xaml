@@ -8,7 +8,7 @@
     <ListView x:Name="EmbeddedList" x:FieldModifier="public" Margin="-12, 0, -12, 0" SelectionMode="None">
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal" />
+                <StackPanel x:Name="PanelTemplate" Orientation="Vertical" />
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
